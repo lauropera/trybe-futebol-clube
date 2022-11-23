@@ -1,4 +1,3 @@
-import * as bcryptjs from 'bcryptjs';
 import { ILogin, IUser } from '../../interfaces';
 
 export const userMock: IUser = {

@@ -17,29 +17,35 @@ const { expect } = chai;
 describe('"/login" route integration tests', () => {
   let chaiHttpResponse: Response;
 
-  before(async () => {
-    sinon.stub(User, 'findOne').resolves(userMock as User);
-  });
-
-  after(() => {
-    (User.findOne as sinon.SinonStub).restore();
-  });
-
   describe('POST', () => {
     describe('With sucess', () => {
       it('Login successfully', async () => {
+        sinon.stub(User, 'findOne').resolves(userMock as User);
         sinon.stub(bcryptjs, 'compare').resolves(true);
+
         chaiHttpResponse = await chai
           .request(app)
           .post('/login')
           .send(loginMock);
 
         expect(chaiHttpResponse.status).to.be.equal(200);
+
+        (User.findOne as sinon.SinonStub).restore();
         (bcryptjs.compare as sinon.SinonStub).restore();
       });
     });
 
     describe('It fails', () => {
+      beforeEach(async () => {
+        sinon.stub(User, 'findOne').resolves(undefined);
+        sinon.stub(bcryptjs, 'compare').resolves(false);
+      });
+
+      afterEach(() => {
+        (User.findOne as sinon.SinonStub).restore();
+        (bcryptjs.compare as sinon.SinonStub).restore();
+      });
+
       it('Fails if the email is not passed', async () => {
         chaiHttpResponse = await chai
           .request(app)
@@ -77,7 +83,8 @@ describe('"/login" route integration tests', () => {
       });
 
       it('Fails if the password is invalid', async () => {
-        sinon.stub(bcryptjs, 'compare').resolves(false);
+        // sinon.stub(bcryptjs, 'compare').resolves(false);
+
         chaiHttpResponse = await chai
           .request(app)
           .post('/login')
@@ -87,7 +94,6 @@ describe('"/login" route integration tests', () => {
         expect(chaiHttpResponse.body).to.deep.equal({
           message: 'Incorrect email or password',
         });
-        (bcryptjs.compare as sinon.SinonStub).restore();
       });
     });
   });
@@ -96,17 +102,15 @@ describe('"/login" route integration tests', () => {
 describe('"/login/validate" route integration tests', () => {
   let chaiHttpResponse: Response;
 
-  before(async () => {
-    sinon.stub(jsonwebtoken, 'verify').resolves({ id: 1 });
-    sinon.stub(User, 'findOne').resolves(userMock as User);
-  });
-
-  after(() => {
-    (User.findOne as sinon.SinonStub).restore();
-  });
-
   describe('GET', () => {
+    afterEach(() => {
+      (User.findOne as sinon.SinonStub).restore();
+    });
+
     it('Returns the logged user role', async () => {
+      sinon.stub(jsonwebtoken, 'verify').resolves({ id: 1 });
+      sinon.stub(User, 'findOne').resolves(userMock as User);
+
       chaiHttpResponse = await chai
         .request(app)
         .get('/login/validate')
@@ -117,15 +121,17 @@ describe('"/login/validate" route integration tests', () => {
     });
 
     it('Fails if the user does not exists', async () => {
-      (User.findOne as sinon.SinonStub).restore();
       sinon.stub(User, 'findOne').resolves(undefined);
+
       chaiHttpResponse = await chai
         .request(app)
         .get('/login/validate')
         .auth('token', { type: 'bearer' });
 
       expect(chaiHttpResponse.status).to.be.equal(404);
-      expect(chaiHttpResponse.body).to.deep.equal({ message: 'User not found' });
+      expect(chaiHttpResponse.body).to.deep.equal({
+        message: 'User not found',
+      });
     });
   });
 });

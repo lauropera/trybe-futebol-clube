@@ -6,6 +6,7 @@ import { UserService } from '../services';
 class UserController implements IUserController {
   constructor(private _service: UserService) {
     this.login = this.login.bind(this);
+    this.getUserRole = this.getUserRole.bind(this);
   }
 
   public async login(req: Request, res: Response): Promise<void> {
