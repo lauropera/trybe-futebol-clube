@@ -1,11 +1,13 @@
 import { compare } from 'bcryptjs';
 import IUserService from '../interfaces/IUserService';
 import HttpException from '../utils/HttpException';
-import User from '../database/models/User';
-import { ILogin, IUser } from '../interfaces';
+import UserRepository from '../database/models/User';
+import { ILogin } from '../interfaces';
 import TokenUtils from '../utils/TokenUtils';
 
 class UserService implements IUserService {
+  private _model = UserRepository;
+
   constructor(private _tokenUtils = new TokenUtils()) {}
 
   public async login(credentials: ILogin): Promise<string> {
@@ -13,7 +15,7 @@ class UserService implements IUserService {
       throw new HttpException(400, 'All fields must be filled');
     }
 
-    const user = await User.findOne({ where: { email: credentials.email } });
+    const user = await this._model.findOne({ where: { email: credentials.email } });
     if (!user || !(await compare(credentials.password, user.password))) {
       throw new HttpException(401, 'Incorrect email or password');
     }
@@ -22,8 +24,8 @@ class UserService implements IUserService {
     return token;
   }
 
-  public static async getRole(id: number): Promise<string> {
-    const user = await User.findOne({ where: { id } });
+  public async getRole(id: number): Promise<string> {
+    const user = await this._model.findOne({ where: { id } });
     if (!user) throw new HttpException(404, 'User not found');
     return user.role;
   }

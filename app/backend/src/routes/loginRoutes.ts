@@ -10,6 +10,6 @@ const userService = new UserService();
 const userController = new UserController(userService);
 
 router.post('/', userController.login);
-router.get('/validate', authMiddleware, UserController.getUserRole);
+router.get('/validate', authMiddleware, userController.getUserRole);
 
 export default router;
