@@ -1,6 +1,7 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
-import jsonwebtoken from 'jsonwebtoken';
+import * as jsonwebtoken from 'jsonwebtoken';
+import * as bcryptjs from 'bcryptjs';
 import { Response } from 'superagent';
 // @ts-ignore
 import chaiHttp = require('chai-http');
@@ -27,12 +28,14 @@ describe('"/login" route integration tests', () => {
   describe('POST', () => {
     describe('With sucess', () => {
       it('Login successfully', async () => {
+        sinon.stub(bcryptjs, 'compare').resolves(true);
         chaiHttpResponse = await chai
           .request(app)
           .post('/login')
           .send(loginMock);
 
         expect(chaiHttpResponse.status).to.be.equal(200);
+        (bcryptjs.compare as sinon.SinonStub).restore();
       });
     });
 
@@ -44,7 +47,7 @@ describe('"/login" route integration tests', () => {
           .send(invalidLogins[0]);
 
         expect(chaiHttpResponse.status).to.be.equal(400);
-        expect(chaiHttpResponse.body).to.be.equal({
+        expect(chaiHttpResponse.body).to.deep.equal({
           message: 'All fields must be filled',
         });
       });
@@ -56,7 +59,7 @@ describe('"/login" route integration tests', () => {
           .send(invalidLogins[1]);
 
         expect(chaiHttpResponse.status).to.be.equal(400);
-        expect(chaiHttpResponse.body).to.be.equal({
+        expect(chaiHttpResponse.body).to.deep.equal({
           message: 'All fields must be filled',
         });
       });
@@ -65,24 +68,26 @@ describe('"/login" route integration tests', () => {
         chaiHttpResponse = await chai
           .request(app)
           .post('/login')
-          .send(invalidLogins[3]);
+          .send(invalidLogins[2]);
 
         expect(chaiHttpResponse.status).to.be.equal(401);
-        expect(chaiHttpResponse.body).to.be.equal({
+        expect(chaiHttpResponse.body).to.deep.equal({
           message: 'Incorrect email or password',
         });
       });
 
       it('Fails if the password is invalid', async () => {
+        sinon.stub(bcryptjs, 'compare').resolves(false);
         chaiHttpResponse = await chai
           .request(app)
           .post('/login')
           .send({ ...loginMock, password: 'coxinha' });
 
         expect(chaiHttpResponse.status).to.be.equal(401);
-        expect(chaiHttpResponse.body).to.be.equal({
+        expect(chaiHttpResponse.body).to.deep.equal({
           message: 'Incorrect email or password',
         });
+        (bcryptjs.compare as sinon.SinonStub).restore();
       });
     });
   });
@@ -108,7 +113,7 @@ describe('"/login/validate" route integration tests', () => {
         .auth('token', { type: 'bearer' });
 
       expect(chaiHttpResponse.status).to.be.equal(200);
-      expect(chaiHttpResponse.body).to.be.equal({ role: userMock.role });
+      expect(chaiHttpResponse.body).to.deep.equal({ role: userMock.role });
     });
   });
 });
