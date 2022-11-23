@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
 
-export default interface ITeamController {
+export default interface ITeamsController {
   listAllTeams(req: Request, res: Response): Promise<void>;
 }

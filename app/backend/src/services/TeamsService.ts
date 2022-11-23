@@ -1,4 +1,4 @@
-import ITeamsService from '../interfaces/ITeamsService';
+import { ITeamsService } from '../interfaces';
 
 class TeamsService implements ITeamsService {}
 

@@ -1,5 +1,5 @@
-import ITeamController from "../interfaces/ITeamController";
+import { ITeamsController } from '../interfaces';
 
-class TeamsController implements ITeamController {}
+class TeamsController implements ITeamsController {}
 
 export default TeamsController;
