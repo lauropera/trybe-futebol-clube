@@ -9,3 +9,5 @@ const teamsService = new TeamsService();
 const teamsController = new TeamsController(teamsService);
 
 router.get('/', teamsController.listAllTeams);
+
+export default router;
