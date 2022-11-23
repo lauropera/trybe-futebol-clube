@@ -17,13 +17,13 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      const { token } = await requestLogin('/login', { email, password });
-
-      setToken(token);
+      const a = await requestLogin('/login', { email, password });
+      console.log(a);
+      setToken(a.token);
 
       const { role } = await requestData('/login/validate', { email, password });
 
-      localStorage.setItem('token',  token);
+      localStorage.setItem('token',  a.token);
       localStorage.setItem('role',  role);
 
       setIsLogged(true);

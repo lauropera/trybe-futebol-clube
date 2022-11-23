@@ -1,4 +1,6 @@
 import * as express from 'express';
+import loginRoutes from './routes/loginRoutes';
+import httpErrorMiddleware from './middlewares/HttpErrorMiddleware';
 
 class App {
   public app: express.Express;
@@ -22,6 +24,9 @@ class App {
 
     this.app.use(express.json());
     this.app.use(accessControl);
+    this.app.use('/login', loginRoutes);
+
+    this.app.use(httpErrorMiddleware);
   }
 
   public start(PORT: string | number):void {
