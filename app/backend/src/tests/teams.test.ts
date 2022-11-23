@@ -46,7 +46,7 @@ describe('"/teams/:id" route integration tests', () => {
 
   afterEach(() => {
     (Team.findByPk as sinon.SinonStub).restore();
-  })
+  });
 
   describe('GET', () => {
     it('Returns a team by his Id', async () => {
@@ -63,8 +63,10 @@ describe('"/teams/:id" route integration tests', () => {
 
       chaiHttpResponse = await chai.request(app).get('/teams/1');
 
-      expect(chaiHttpResponse.status).to.be.equal(200);
-      expect(chaiHttpResponse.body).to.deep.equal(teamsMock[0]);
-    })
+      expect(chaiHttpResponse.status).to.be.equal(404);
+      expect(chaiHttpResponse.body).to.deep.equal({
+        message: 'Team not found',
+      });
+    });
   });
 });
