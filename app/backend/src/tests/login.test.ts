@@ -97,7 +97,7 @@ describe('"/login/validate" route integration tests', () => {
   let chaiHttpResponse: Response;
 
   before(async () => {
-    sinon.stub(jsonwebtoken, 'verify').resolves({ data: 'OK' });
+    sinon.stub(jsonwebtoken, 'verify').resolves({ id: 1 });
     sinon.stub(User, 'findOne').resolves(userMock as User);
   });
 
@@ -109,11 +109,23 @@ describe('"/login/validate" route integration tests', () => {
     it('Returns the logged user role', async () => {
       chaiHttpResponse = await chai
         .request(app)
-        .get('/login/verify')
+        .get('/login/validate')
         .auth('token', { type: 'bearer' });
 
       expect(chaiHttpResponse.status).to.be.equal(200);
       expect(chaiHttpResponse.body).to.deep.equal({ role: userMock.role });
+    });
+
+    it('Fails if the user does not exists', async () => {
+      (User.findOne as sinon.SinonStub).restore();
+      sinon.stub(User, 'findOne').resolves(undefined);
+      chaiHttpResponse = await chai
+        .request(app)
+        .get('/login/validate')
+        .auth('token', { type: 'bearer' });
+
+      expect(chaiHttpResponse.status).to.be.equal(404);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: 'User not found' });
     });
   });
 });
