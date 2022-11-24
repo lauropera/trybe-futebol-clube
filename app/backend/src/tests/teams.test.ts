@@ -53,7 +53,7 @@ describe('"/teams/:id" route integration tests', () => {
 
       expect(chaiHttpResponse.status).to.be.equal(404);
       expect(chaiHttpResponse.body).to.deep.equal({
-        message: 'Team not found',
+        message: 'There is no team with such id!',
       });
     });
   });

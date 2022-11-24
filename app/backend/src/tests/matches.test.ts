@@ -59,19 +59,16 @@ describe('"/matches" route integration tests', () => {
     });
   });
 
-  describe.skip('POST', () => {
-    beforeEach(() => {
-      sinon.stub(jwt, 'verify').resolves({ id: 1 });
-    });
-
-    afterEach(() => {
-      (Match.create as sinon.SinonStub).restore();
-      (jwt.verify as sinon.SinonStub).restore();
-    });
-
+  describe('POST', () => {
     describe('With sucess', () => {
       it('Creates a new match', async () => {
-        // sinon.stub(Match, 'create').resolves(newMatchResponseMock);
+        (jwt.verify as sinon.SinonStub).restore();
+
+        sinon.stub(jwt, 'verify').resolves({ id: 1 });
+        sinon
+          .stub(Match, 'create')
+          .resolves(newMatchResponseMock as IMatchFromDB);
+
         chaiHttpResponse = await chai
           .request(app)
           .post('/matches')
@@ -85,6 +82,9 @@ describe('"/matches" route integration tests', () => {
 
     describe('It fails', () => {
       it('Fails if the homeTeam is equal to awayTeam', async () => {
+        (jwt.verify as sinon.SinonStub).restore();
+        sinon.stub(jwt, 'verify').resolves({ id: 1 });
+
         chaiHttpResponse = await chai
           .request(app)
           .post('/matches')
@@ -98,6 +98,9 @@ describe('"/matches" route integration tests', () => {
       });
 
       it('Fails if a team does not exists', async () => {
+        (jwt.verify as sinon.SinonStub).restore();
+        sinon.stub(jwt, 'verify').resolves({ id: 1 });
+
         chaiHttpResponse = await chai
           .request(app)
           .post('/matches')
@@ -111,13 +114,12 @@ describe('"/matches" route integration tests', () => {
       });
 
       it('Fails if the token is invalid', async () => {
-        sinon.stub(jwt, 'verify').resolves(undefined);
+        (jwt.verify as sinon.SinonStub).restore();
 
         chaiHttpResponse = await chai
           .request(app)
           .post('/matches')
-          .send(newMatchMock)
-          .auth('invalidToken', { type: 'bearer' });
+          .send(newMatchMock);
 
         expect(chaiHttpResponse.status).to.be.equal(401);
         expect(chaiHttpResponse.body).to.deep.equal({

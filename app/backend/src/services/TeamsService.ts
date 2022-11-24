@@ -12,7 +12,7 @@ class TeamsService implements ITeamsService {
 
   public async getTeamById(id: number): Promise<ITeam> {
     const team = await this._repository.findByPk(id);
-    if (!team) throw new HttpException(404, 'Team not found');
+    if (!team) throw new HttpException(404, 'There is no team with such id!');
     return team;
   }
 }

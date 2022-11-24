@@ -10,6 +10,7 @@ class MatchesController implements IMatchesController {
     this._service = new MatchesService();
 
     this.listAllMatches = this.listAllMatches.bind(this);
+    this.createMatch = this.createMatch.bind(this);
   }
 
   public async listAllMatches(req: Request, res: Response): Promise<void> {
@@ -20,10 +21,10 @@ class MatchesController implements IMatchesController {
     res.status(StatusCodes.OK).json(matches);
   }
 
-  // public async createMatch(req: Request, res: Response): Promise<void> {
-  //   const newMatch = await this._service.createNewMatch(req.body);
-  //   res.status(201).json(newMatch);
-  // }
+  public async createMatch(req: Request, res: Response): Promise<void> {
+    const newMatch = await this._service.createNewMatch(req.body);
+    res.status(StatusCodes.CREATED).json(newMatch);
+  }
 }
 
 export default MatchesController;
