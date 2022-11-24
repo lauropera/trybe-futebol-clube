@@ -18,9 +18,15 @@ describe('"/login" route integration tests', () => {
   let chaiHttpResponse: Response;
 
   describe('POST', () => {
+    afterEach(() => {
+      (User.findOne as sinon.SinonStub).restore();
+      (bcryptjs.compare as sinon.SinonStub).restore();
+    });
+
     describe('With sucess', () => {
       it('Login successfully', async () => {
         sinon.stub(User, 'findOne').resolves(userMock as User);
+        sinon.stub(jsonwebtoken, 'sign').resolves('token');
         sinon.stub(bcryptjs, 'compare').resolves(true);
 
         chaiHttpResponse = await chai
@@ -29,9 +35,7 @@ describe('"/login" route integration tests', () => {
           .send(loginMock);
 
         expect(chaiHttpResponse.status).to.be.equal(200);
-
-        (User.findOne as sinon.SinonStub).restore();
-        (bcryptjs.compare as sinon.SinonStub).restore();
+        (jsonwebtoken.sign as sinon.SinonStub).restore();
       });
     });
 
@@ -39,11 +43,6 @@ describe('"/login" route integration tests', () => {
       beforeEach(async () => {
         sinon.stub(User, 'findOne').resolves(undefined);
         sinon.stub(bcryptjs, 'compare').resolves(false);
-      });
-
-      afterEach(() => {
-        (User.findOne as sinon.SinonStub).restore();
-        (bcryptjs.compare as sinon.SinonStub).restore();
       });
 
       it('Fails if the email is not passed', async () => {
@@ -83,8 +82,6 @@ describe('"/login" route integration tests', () => {
       });
 
       it('Fails if the password is invalid', async () => {
-        // sinon.stub(bcryptjs, 'compare').resolves(false);
-
         chaiHttpResponse = await chai
           .request(app)
           .post('/login')
