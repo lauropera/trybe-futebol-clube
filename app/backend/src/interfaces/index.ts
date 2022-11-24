@@ -8,6 +8,7 @@ import ITeamsService from './ITeamsService';
 import IMatchesController from './IMatchesController';
 import IMatchesService from './IMatchesService';
 import IMatch from './IMatch';
+import INewMatch from './INewMatch';
 
 export {
   IUser,
@@ -20,4 +21,5 @@ export {
   IMatchesController,
   IMatchesService,
   IMatch,
+  INewMatch,
 };
