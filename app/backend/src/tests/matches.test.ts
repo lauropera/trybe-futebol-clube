@@ -15,6 +15,7 @@ import {
   newMatchMock,
   newMatchResponseMock,
 } from './mocks/matchesMock';
+import { StatusCodes } from 'http-status-codes';
 
 chai.use(chaiHttp);
 
@@ -125,6 +126,36 @@ describe('"/matches" route integration tests', () => {
         expect(chaiHttpResponse.body).to.deep.equal({
           message: 'Token must be a valid token',
         });
+      });
+    });
+  });
+});
+
+describe('"/matches/:id/finish" route integration tests', () => {
+  let chaiHttpResponse: Response;
+
+  describe('PATCH', () => {
+    afterEach(() => {
+      (Match.update as sinon.SinonStub).restore();
+    });
+
+    it('Finishs a match by his id', async () => {
+      sinon.stub(Match, 'update').resolves([1]);
+
+      chaiHttpResponse = await chai.request(app).patch('/matches/1/finish');
+
+      expect(chaiHttpResponse.status).to.be.equal(StatusCodes.OK);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: 'Finished' });
+    });
+
+    it('Fails if the update goes wrong', async () => {
+      sinon.stub(Match, 'update').resolves([-1]);
+
+      chaiHttpResponse = await chai.request(app).patch('/matches/1/finish');
+
+      expect(chaiHttpResponse.status).to.be.equal(StatusCodes.OK);
+      expect(chaiHttpResponse.body).to.deep.equal({
+        message: 'Update unsuccessful',
       });
     });
   });
