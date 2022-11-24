@@ -3,7 +3,11 @@ import MatchesService from '../services/MatchesService';
 import { IMatchesController } from '../interfaces/IMatch';
 
 class MatchesController implements IMatchesController {
-  constructor(private _service: MatchesService) {
+  private _service: MatchesService;
+
+  constructor() {
+    this._service = new MatchesService();
+
     this.listAllMatches = this.listAllMatches.bind(this);
   }
 

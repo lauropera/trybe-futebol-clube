@@ -3,7 +3,11 @@ import { TeamsService } from '../services';
 import { ITeamsController } from '../interfaces/ITeam';
 
 class TeamsController implements ITeamsController {
-  constructor(private _service: TeamsService) {
+  private _service: TeamsService;
+
+  constructor() {
+    this._service = new TeamsService();
+
     this.listAllTeams = this.listAllTeams.bind(this);
     this.listTeamById = this.listTeamById.bind(this);
   }

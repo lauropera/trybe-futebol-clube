@@ -1,10 +1,8 @@
 import 'express-async-errors';
 import { Router } from 'express';
-import { MatchesService } from '../services';
 import { MatchesController } from '../controllers';
 
-const matchesService = new MatchesService();
-const matchesController = new MatchesController(matchesService);
+const matchesController = new MatchesController();
 
 const router = Router();
 

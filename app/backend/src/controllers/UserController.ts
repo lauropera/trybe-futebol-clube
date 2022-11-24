@@ -3,7 +3,11 @@ import { IUserController } from '../interfaces/IUser';
 import { UserService } from '../services';
 
 class UserController implements IUserController {
-  constructor(private _service: UserService) {
+  private _service: UserService;
+
+  constructor() {
+    this._service = new UserService();
+
     this.login = this.login.bind(this);
     this.getUserRole = this.getUserRole.bind(this);
   }

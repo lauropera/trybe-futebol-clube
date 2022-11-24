@@ -1,12 +1,12 @@
 import { IMatchesService, IMatchFromDB } from '../interfaces/IMatch';
-import MatchRepository from '../database/models/Match';
+import Match from '../database/models/Match';
 import Team from '../database/models/Team';
 
 class MatchesService implements IMatchesService {
-  private _model = MatchRepository;
+  private _repository = Match;
 
   public async getAllMatches(): Promise<IMatchFromDB[]> {
-    const matches = (await this._model.findAll({
+    const matches = (await this._repository.findAll({
       include: [
         { model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
         { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
@@ -17,7 +17,7 @@ class MatchesService implements IMatchesService {
 
   public async getMatchesByProgress(status: string): Promise<IMatchFromDB[]> {
     const inProgress = status === 'true';
-    const matches = (await this._model.findAll({
+    const matches = (await this._repository.findAll({
       include: [
         { model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
         { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
