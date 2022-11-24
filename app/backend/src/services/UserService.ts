@@ -1,9 +1,9 @@
 import { compare } from 'bcryptjs';
-import { ILogin } from '../interfaces';
+import ILogin from '../interfaces/ILogin';
 import UserRepository from '../database/models/User';
-import IUserService from '../interfaces/IUserService';
 import TokenUtils from '../utils/TokenUtils';
 import HttpException from '../utils/HttpException';
+import { IUserService } from '../interfaces/IUser';
 
 class UserService implements IUserService {
   private _model = UserRepository;
@@ -15,7 +15,9 @@ class UserService implements IUserService {
       throw new HttpException(400, 'All fields must be filled');
     }
 
-    const user = await this._model.findOne({ where: { email: credentials.email } });
+    const user = await this._model.findOne({
+      where: { email: credentials.email },
+    });
     if (!user || !(await compare(credentials.password, user.password))) {
       throw new HttpException(401, 'Incorrect email or password');
     }

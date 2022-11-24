@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import MatchesService from '../services/MatchesService';
-import { IMatchesController } from '../interfaces';
+import { IMatchesController } from '../interfaces/IMatch';
 
 class MatchesController implements IMatchesController {
   constructor(private _service: MatchesService) {

@@ -1,4 +1,4 @@
-import { ITeam, ITeamsService } from '../interfaces';
+import { ITeam, ITeamsService } from '../interfaces/ITeam';
 import TeamRepository from '../database/models/Team';
 import HttpException from '../utils/HttpException';
 

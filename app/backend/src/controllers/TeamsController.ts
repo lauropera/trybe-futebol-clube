@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { TeamsService } from '../services';
-import { ITeamsController } from '../interfaces';
+import { ITeamsController } from '../interfaces/ITeam';
 
 class TeamsController implements ITeamsController {
   constructor(private _service: TeamsService) {

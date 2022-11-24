@@ -1,20 +1,6 @@
-import { INewMatch } from '../../interfaces';
+import { IMatch, INewMatch, IMatchInformations } from '../../interfaces/IMatch';
 
-interface MatchData {
-  id: number;
-  homeTeam: number;
-  homeTeamGoals: number;
-  awayTeam: number;
-  awayTeamGoals: number;
-  inProgress: boolean;
-}
-
-interface MatchInformations extends MatchData {
-  teamHome: { teamName: string };
-  teamAway: { teamName: string };
-}
-
-export const matchesMock: MatchInformations[] = [
+export const matchesMock: IMatchInformations[] = [
   {
     id: 1,
     homeTeam: 16,
@@ -67,7 +53,7 @@ export const invalidMatchesMock: INewMatch[] = [
   }
 ];
 
-export const newMatchResponseMock: MatchData = {
+export const newMatchResponseMock: IMatch = {
   id: 1,
   homeTeam: 16,
   awayTeam: 8,
