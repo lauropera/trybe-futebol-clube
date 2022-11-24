@@ -153,7 +153,7 @@ describe('"/matches/:id/finish" route integration tests', () => {
 
       chaiHttpResponse = await chai.request(app).patch('/matches/1/finish');
 
-      expect(chaiHttpResponse.status).to.be.equal(StatusCodes.OK);
+      expect(chaiHttpResponse.status).to.be.equal(StatusCodes.NOT_FOUND);
       expect(chaiHttpResponse.body).to.deep.equal({
         message: 'Update unsuccessful',
       });

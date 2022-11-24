@@ -11,9 +11,10 @@ class MatchesController implements IMatchesController {
 
     this.listAll = this.listAll.bind(this);
     this.create = this.create.bind(this);
+    this.finish = this.finish.bind(this);
   }
 
-  public async listAll(req: Request, res: Response): Promise<void> {
+  async listAll(req: Request, res: Response): Promise<void> {
     const { inProgress } = req.query;
     const matches = inProgress === undefined
       ? await this._service.getAll()
@@ -21,9 +22,15 @@ class MatchesController implements IMatchesController {
     res.status(StatusCodes.OK).json(matches);
   }
 
-  public async create(req: Request, res: Response): Promise<void> {
+  async create(req: Request, res: Response): Promise<void> {
     const newMatch = await this._service.create(req.body);
     res.status(StatusCodes.CREATED).json(newMatch);
+  }
+
+  async finish(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    await this._service.finish(Number(id));
+    res.status(StatusCodes.OK).json({ message: 'Finished' });
   }
 }
 

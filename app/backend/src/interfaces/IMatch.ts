@@ -23,10 +23,12 @@ export interface IMatchFromDB extends IMatchInformations, Match {}
 export interface IMatchesController {
   listAll(req: Request, res: Response): Promise<void>;
   create(req: Request, res: Response): Promise<void>;
+  finish(req: Request, res: Response): Promise<void>;
 }
 
 export interface IMatchesService {
   getAll(): Promise<IMatchFromDB[]>;
   getByProgress(status: string): Promise<IMatchFromDB[]>;
   create(match: INewMatch): Promise<IMatch>;
+  finish(id: number): Promise<void>;
 }

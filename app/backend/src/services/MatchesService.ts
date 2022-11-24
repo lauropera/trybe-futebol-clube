@@ -18,14 +18,14 @@ class MatchesService implements IMatchesService {
   private _repository = Match;
   private _teamRepository = Team;
 
-  public async getAll(): Promise<IMatchFromDB[]> {
+  async getAll(): Promise<IMatchFromDB[]> {
     const matches = (await this._repository.findAll({
       include: INCLUDE_OPTIONS,
     })) as IMatchFromDB[];
     return matches;
   }
 
-  public async getByProgress(status: string): Promise<IMatchFromDB[]> {
+  async getByProgress(status: string): Promise<IMatchFromDB[]> {
     const inProgress = status === 'true';
     const matches = (await this._repository.findAll({
       include: INCLUDE_OPTIONS,
@@ -54,7 +54,7 @@ class MatchesService implements IMatchesService {
     }
   }
 
-  public async create(match: INewMatch): Promise<IMatch> {
+  async create(match: INewMatch): Promise<IMatch> {
     MatchesService.validateMatchSchema(match);
     await this.validateMatchTeams(match);
 
@@ -63,6 +63,14 @@ class MatchesService implements IMatchesService {
       inProgress: true,
     });
     return newMatch;
+  }
+
+  async finish(id: number): Promise<void> {
+    const [result] = await this._repository.update(
+      { inProgress: false },
+      { where: { id } },
+    );
+    if (result !== 1) throw new HttpException(404, 'Update unsuccessful');
   }
 }
 
