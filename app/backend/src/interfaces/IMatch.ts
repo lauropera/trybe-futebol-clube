@@ -22,11 +22,11 @@ export interface IMatchFromDB extends IMatchInformations, Match {}
 
 export interface IMatchesController {
   listAllMatches(req: Request, res: Response): Promise<void>;
-  createMatch(req: Request, res: Response): Promise<void>;
+  // createMatch(req: Request, res: Response): Promise<void>;
 }
 
 export interface IMatchesService {
   getAllMatches(): Promise<IMatchFromDB[]>;
   getMatchesByProgress(status: string): Promise<IMatchFromDB[]>;
-  createNewMatch(match: INewMatch): Promise<IMatch>;
+  // createNewMatch(match: INewMatch): Promise<IMatch>;
 }

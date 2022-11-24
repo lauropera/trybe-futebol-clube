@@ -1,8 +1,8 @@
 import {
-  IMatch,
+  // IMatch,
   IMatchesService,
   IMatchFromDB,
-  INewMatch,
+  // INewMatch,
 } from '../interfaces/IMatch';
 import Match from '../database/models/Match';
 import Team from '../database/models/Team';
@@ -32,7 +32,7 @@ class MatchesService implements IMatchesService {
     return matches;
   }
 
-  public async createNewMatch(match: INewMatch): Promise<IMatch> {}
+  // public async createNewMatch(match: INewMatch): Promise<IMatch> {}
 }
 
 export default MatchesService;

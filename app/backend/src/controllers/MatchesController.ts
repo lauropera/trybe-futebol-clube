@@ -19,10 +19,10 @@ class MatchesController implements IMatchesController {
     res.status(200).json(matches);
   }
 
-  public async createMatch(req: Request, res: Response): Promise<void> {
-    const newMatch = await this._service.createNewMatch(req.body);
-    res.status(201).json(newMatch);
-  }
+  // public async createMatch(req: Request, res: Response): Promise<void> {
+  //   const newMatch = await this._service.createNewMatch(req.body);
+  //   res.status(201).json(newMatch);
+  // }
 }
 
 export default MatchesController;
