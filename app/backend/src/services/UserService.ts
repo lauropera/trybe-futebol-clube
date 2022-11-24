@@ -1,9 +1,9 @@
 import { compare } from 'bcryptjs';
-import IUserService from '../interfaces/IUserService';
-import HttpException from '../utils/HttpException';
-import UserRepository from '../database/models/User';
 import { ILogin } from '../interfaces';
+import UserRepository from '../database/models/User';
+import IUserService from '../interfaces/IUserService';
 import TokenUtils from '../utils/TokenUtils';
+import HttpException from '../utils/HttpException';
 
 class UserService implements IUserService {
   private _model = UserRepository;

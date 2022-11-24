@@ -1,6 +1,6 @@
-import HttpException from '../utils/HttpException';
 import { ITeam, ITeamsService } from '../interfaces';
 import TeamRepository from '../database/models/Team';
+import HttpException from '../utils/HttpException';
 
 class TeamsService implements ITeamsService {
   private _model = TeamRepository;

@@ -1,7 +1,6 @@
-import { IMatchesService } from '../interfaces';
+import { IMatchesService, IMatch } from '../interfaces';
 import MatchRepository from '../database/models/Match';
 import Team from '../database/models/Team';
-import IMatch from '../interfaces/IMatch';
 
 class MatchesService implements IMatchesService {
   private _model = MatchRepository;

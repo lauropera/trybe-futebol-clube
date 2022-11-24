@@ -16,19 +16,7 @@ const { app } = new App();
 const { expect } = chai;
 
 describe('"/teams" route integration tests', () => {
-  /**
-   * Exemplo do uso de stubs com tipos
-   */
-
   let chaiHttpResponse: Response;
-
-  // before(async () => {
-  //   sinon.stub(Team, 'findAll').resolves(teamsMock as Team[]);
-  // });
-
-  // after(() => {
-  //   (Team.findAll as sinon.SinonStub).restore();
-  // });
 
   describe('GET', () => {
     it('Returns all teams', async () => {
