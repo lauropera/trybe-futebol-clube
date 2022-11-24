@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import { TeamsService } from '../services';
 import { ITeamsController } from '../interfaces/ITeam';
 
@@ -14,13 +15,13 @@ class TeamsController implements ITeamsController {
 
   public async listAllTeams(_req: Request, res: Response): Promise<void> {
     const teams = await this._service.getAllTeams();
-    res.status(200).json(teams);
+    res.status(StatusCodes.OK).json(teams);
   }
 
   public async listTeamById(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     const team = await this._service.getTeamById(Number(id));
-    res.status(200).json(team);
+    res.status(StatusCodes.OK).json(team);
   }
 }
 
