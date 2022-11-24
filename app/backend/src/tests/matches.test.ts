@@ -16,7 +16,7 @@ const { app } = new App();
 
 const { expect } = chai;
 
-describe.only('"/matches" route integration tests', () => {
+describe('"/matches" route integration tests', () => {
   let chaiHttpResponse: Response;
 
   describe('GET', () => {
