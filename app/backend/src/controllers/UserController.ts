@@ -10,7 +10,7 @@ class UserController implements IUserController {
     this._service = new UserService();
 
     this.login = this.login.bind(this);
-    this.getUserRole = this.getUserRole.bind(this);
+    this.getRole = this.getRole.bind(this);
   }
 
   public async login(req: Request, res: Response): Promise<void> {
@@ -18,7 +18,7 @@ class UserController implements IUserController {
     res.status(StatusCodes.OK).json({ token });
   }
 
-  public async getUserRole(_req: Request, res: Response): Promise<void> {
+  public async getRole(_req: Request, res: Response): Promise<void> {
     const { id } = res.locals.userIddentifier;
     const role = await this._service.getRole(id);
     res.status(StatusCodes.OK).json({ role });

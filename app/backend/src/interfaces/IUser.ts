@@ -9,7 +9,7 @@ export interface IUser extends ILogin {
 
 export interface IUserController {
   login(req: Request, res: Response): Promise<void>;
-  getUserRole(req: Request, res: Response): Promise<void>;
+  getRole(req: Request, res: Response): Promise<void>;
 }
 
 export interface IUserService {

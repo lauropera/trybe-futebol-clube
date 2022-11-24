@@ -9,27 +9,26 @@ import Match from '../database/models/Match';
 import Team from '../database/models/Team';
 import { matchSchema } from './validations/schemas/schema';
 
+const INCLUDE_OPTIONS = [
+  { model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
+  { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
+];
+
 class MatchesService implements IMatchesService {
   private _repository = Match;
   private _teamRepository = Team;
 
-  public async getAllMatches(): Promise<IMatchFromDB[]> {
+  public async getAll(): Promise<IMatchFromDB[]> {
     const matches = (await this._repository.findAll({
-      include: [
-        { model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
-        { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
-      ],
+      include: INCLUDE_OPTIONS,
     })) as IMatchFromDB[];
     return matches;
   }
 
-  public async getMatchesByProgress(status: string): Promise<IMatchFromDB[]> {
+  public async getByProgress(status: string): Promise<IMatchFromDB[]> {
     const inProgress = status === 'true';
     const matches = (await this._repository.findAll({
-      include: [
-        { model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
-        { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
-      ],
+      include: INCLUDE_OPTIONS,
       where: { inProgress },
     })) as IMatchFromDB[];
     return matches;
@@ -55,7 +54,7 @@ class MatchesService implements IMatchesService {
     }
   }
 
-  public async createNewMatch(match: INewMatch): Promise<IMatch> {
+  public async create(match: INewMatch): Promise<IMatch> {
     MatchesService.validateMatchSchema(match);
     await this.validateMatchTeams(match);
 

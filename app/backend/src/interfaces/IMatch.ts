@@ -21,12 +21,12 @@ export interface IMatchInformations extends IMatch {
 export interface IMatchFromDB extends IMatchInformations, Match {}
 
 export interface IMatchesController {
-  listAllMatches(req: Request, res: Response): Promise<void>;
-  createMatch(req: Request, res: Response): Promise<void>;
+  listAll(req: Request, res: Response): Promise<void>;
+  create(req: Request, res: Response): Promise<void>;
 }
 
 export interface IMatchesService {
-  getAllMatches(): Promise<IMatchFromDB[]>;
-  getMatchesByProgress(status: string): Promise<IMatchFromDB[]>;
-  createNewMatch(match: INewMatch): Promise<IMatch>;
+  getAll(): Promise<IMatchFromDB[]>;
+  getByProgress(status: string): Promise<IMatchFromDB[]>;
+  create(match: INewMatch): Promise<IMatch>;
 }

@@ -18,6 +18,7 @@ class UserService implements IUserService {
     const user = await this._repository.findOne({
       where: { email: credentials.email },
     });
+
     if (!user || !(await compare(credentials.password, user.password))) {
       throw new HttpException(401, 'Incorrect email or password');
     }

@@ -9,20 +9,20 @@ class MatchesController implements IMatchesController {
   constructor() {
     this._service = new MatchesService();
 
-    this.listAllMatches = this.listAllMatches.bind(this);
-    this.createMatch = this.createMatch.bind(this);
+    this.listAll = this.listAll.bind(this);
+    this.create = this.create.bind(this);
   }
 
-  public async listAllMatches(req: Request, res: Response): Promise<void> {
+  public async listAll(req: Request, res: Response): Promise<void> {
     const { inProgress } = req.query;
     const matches = inProgress === undefined
-      ? await this._service.getAllMatches()
-      : await this._service.getMatchesByProgress(String(inProgress));
+      ? await this._service.getAll()
+      : await this._service.getByProgress(String(inProgress));
     res.status(StatusCodes.OK).json(matches);
   }
 
-  public async createMatch(req: Request, res: Response): Promise<void> {
-    const newMatch = await this._service.createNewMatch(req.body);
+  public async create(req: Request, res: Response): Promise<void> {
+    const newMatch = await this._service.create(req.body);
     res.status(StatusCodes.CREATED).json(newMatch);
   }
 }
