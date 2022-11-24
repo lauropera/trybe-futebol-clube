@@ -30,7 +30,7 @@ export const matchesMock: MatchData[] = [
     homeTeamGoals: 1,
     awayTeam: 14,
     awayTeamGoals: 1,
-    inProgress: false,
+    inProgress: true,
     teamHome: {
       teamName: 'Internacional',
     },

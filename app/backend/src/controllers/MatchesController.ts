@@ -7,8 +7,11 @@ class MatchesController implements IMatchesController {
     this.listAllMatches = this.listAllMatches.bind(this);
   }
 
-  public async listAllMatches(_req: Request, res: Response): Promise<void> {
-    const matches = await this._service.getAllMatches();
+  public async listAllMatches(req: Request, res: Response): Promise<void> {
+    const { inProgress } = req.query;
+    const matches = inProgress === undefined
+      ? await this._service.getAllMatches()
+      : await this._service.getMatchesByProgress(String(inProgress));
     res.status(200).json(matches);
   }
 }

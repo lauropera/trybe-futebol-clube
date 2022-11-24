@@ -14,6 +14,18 @@ class MatchesService implements IMatchesService {
     }) as IMatch[];
     return matches;
   }
+
+  public async getMatchesByProgress(status: string): Promise<IMatch[]> {
+    const inProgress = status === 'true';
+    const matches = await this._model.findAll({
+      include: [
+        { model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
+        { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
+      ],
+      where: { inProgress },
+    }) as IMatch[];
+    return matches;
+  }
 }
 
 export default MatchesService;
