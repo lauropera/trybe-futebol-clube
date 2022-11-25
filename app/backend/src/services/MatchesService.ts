@@ -3,6 +3,7 @@ import {
   IMatch,
   IMatchesService,
   IMatchFromDB,
+  IMatchUpdate,
   INewMatch,
 } from '../interfaces/IMatch';
 import Match from '../database/models/Match';
@@ -70,6 +71,11 @@ class MatchesService implements IMatchesService {
       { inProgress: false },
       { where: { id } },
     );
+    if (result !== 1) throw new HttpException(404, 'Update unsuccessful');
+  }
+
+  async update(values: IMatchUpdate, id: number): Promise<void> {
+    const [result] = await this._repository.update(values, { where: { id } });
     if (result !== 1) throw new HttpException(404, 'Update unsuccessful');
   }
 }

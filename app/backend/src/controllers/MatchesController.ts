@@ -12,6 +12,7 @@ class MatchesController implements IMatchesController {
     this.listAll = this.listAll.bind(this);
     this.create = this.create.bind(this);
     this.finish = this.finish.bind(this);
+    this.update = this.update.bind(this);
   }
 
   async listAll(req: Request, res: Response): Promise<void> {
@@ -31,6 +32,12 @@ class MatchesController implements IMatchesController {
     const { id } = req.params;
     await this._service.finish(Number(id));
     res.status(StatusCodes.OK).json({ message: 'Finished' });
+  }
+
+  async update(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    await this._service.update(req.body, Number(id));
+    res.status(StatusCodes.OK).json({ message: 'Successfully updated!' });
   }
 }
 

@@ -1,4 +1,9 @@
-import { IMatch, INewMatch, IMatchInformations } from '../../interfaces/IMatch';
+import {
+  IMatch,
+  INewMatch,
+  IMatchInformations,
+  IMatchUpdate,
+} from '../../interfaces/IMatch';
 
 export const matchesMock: IMatchInformations[] = [
   {
@@ -62,7 +67,7 @@ export const newMatchResponseMock: IMatch = {
   inProgress: true,
 };
 
-export const editingMatchMock = {
+export const updateMatchMock: IMatchUpdate = {
   homeTeamGoals: 7,
   awayTeamGoals: 1,
 };

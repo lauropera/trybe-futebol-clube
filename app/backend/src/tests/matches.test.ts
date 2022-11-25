@@ -10,11 +10,11 @@ import Match from '../database/models/Match';
 import { Response } from 'superagent';
 import { IMatch, IMatchFromDB, IMatchInformations } from '../interfaces/IMatch';
 import {
-  editingMatchMock,
   invalidMatchesMock,
   matchesMock,
   newMatchMock,
   newMatchResponseMock,
+  updateMatchMock,
 } from './mocks/matchesMock';
 import { StatusCodes } from 'http-status-codes';
 
@@ -147,7 +147,7 @@ describe('"/matches/:id/" route integration tests', () => {
         chaiHttpResponse = await chai
           .request(app)
           .patch('/matches/1/')
-          .send(editingMatchMock);
+          .send(updateMatchMock);
 
         expect(chaiHttpResponse.status).to.be.equal(StatusCodes.OK);
         expect(chaiHttpResponse.body).to.deep.equal({

@@ -10,5 +10,6 @@ const router = Router();
 router.get('/', matchesController.listAll);
 router.post('/', authMiddleware, matchesController.create);
 router.patch('/:id/finish', matchesController.finish);
+router.patch('/:id', matchesController.update);
 
 export default router;
