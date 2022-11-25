@@ -10,7 +10,7 @@ class UserService implements IUserService {
 
   constructor(private _tokenUtils = new TokenUtils()) {}
 
-  public async login(credentials: ILogin): Promise<string> {
+  async login(credentials: ILogin): Promise<string> {
     if (!credentials.email || !credentials.password) {
       throw new HttpException(400, 'All fields must be filled');
     }
@@ -27,7 +27,7 @@ class UserService implements IUserService {
     return token;
   }
 
-  public async getRole(id: number): Promise<string> {
+  async getRole(id: number): Promise<string> {
     const user = await this._repository.findOne({ where: { id } });
     if (!user) throw new HttpException(404, 'User not found');
     return user.role;

@@ -13,12 +13,12 @@ class UserController implements IUserController {
     this.getRole = this.getRole.bind(this);
   }
 
-  public async login(req: Request, res: Response): Promise<void> {
+  async login(req: Request, res: Response): Promise<void> {
     const token = await this._service.login(req.body);
     res.status(StatusCodes.OK).json({ token });
   }
 
-  public async getRole(_req: Request, res: Response): Promise<void> {
+  async getRole(_req: Request, res: Response): Promise<void> {
     const { id } = res.locals.userIddentifier;
     const role = await this._service.getRole(id);
     res.status(StatusCodes.OK).json({ role });

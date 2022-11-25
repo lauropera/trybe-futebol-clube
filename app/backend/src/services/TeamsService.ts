@@ -5,12 +5,12 @@ import HttpException from '../utils/HttpException';
 class TeamsService implements ITeamsService {
   private _repository = Team;
 
-  public async getAllTeams(): Promise<ITeam[]> {
+  async getAllTeams(): Promise<ITeam[]> {
     const teams = await this._repository.findAll();
     return teams;
   }
 
-  public async getTeamById(id: number): Promise<ITeam> {
+  async getTeamById(id: number): Promise<ITeam> {
     const team = await this._repository.findByPk(id);
     if (!team) throw new HttpException(404, 'There is no team with such id!');
     return team;

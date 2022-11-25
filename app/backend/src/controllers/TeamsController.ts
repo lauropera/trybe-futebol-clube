@@ -13,12 +13,12 @@ class TeamsController implements ITeamsController {
     this.listTeamById = this.listTeamById.bind(this);
   }
 
-  public async listAllTeams(_req: Request, res: Response): Promise<void> {
+  async listAllTeams(_req: Request, res: Response): Promise<void> {
     const teams = await this._service.getAllTeams();
     res.status(StatusCodes.OK).json(teams);
   }
 
-  public async listTeamById(req: Request, res: Response): Promise<void> {
+  async listTeamById(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     const team = await this._service.getTeamById(Number(id));
     res.status(StatusCodes.OK).json(team);
