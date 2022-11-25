@@ -58,6 +58,12 @@ export const invalidMatchesMock: INewMatch[] = [
   },
 ];
 
+export const missingFieldsMock: Omit<INewMatch, 'homeTeam'> = {
+  awayTeam: 8,
+  homeTeamGoals: 2,
+  awayTeamGoals: 2,
+};
+
 export const newMatchResponseMock: IMatch = {
   id: 1,
   homeTeam: 16,

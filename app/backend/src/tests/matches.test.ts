@@ -12,6 +12,7 @@ import { IMatch, IMatchFromDB, IMatchInformations } from '../interfaces/IMatch';
 import {
   invalidMatchesMock,
   matchesMock,
+  missingFieldsMock,
   newMatchMock,
   newMatchResponseMock,
   updateMatchMock,
@@ -112,6 +113,22 @@ describe('"/matches" route integration tests', () => {
         expect(chaiHttpResponse.status).to.be.equal(404);
         expect(chaiHttpResponse.body).to.deep.equal({
           message: 'There is no team with such id!',
+        });
+      });
+
+      it('Fails if the requisition body is missing fields', async () => {
+        (jwt.verify as sinon.SinonStub).restore();
+        sinon.stub(jwt, 'verify').resolves({ id: 1 });
+
+        chaiHttpResponse = await chai
+          .request(app)
+          .post('/matches')
+          .send(missingFieldsMock)
+          .auth('token', { type: 'bearer' });
+
+        expect(chaiHttpResponse.status).to.be.equal(400);
+        expect(chaiHttpResponse.body).to.deep.equal({
+          message: 'All fields must be filled',
         });
       });
 
