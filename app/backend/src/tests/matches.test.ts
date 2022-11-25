@@ -10,6 +10,7 @@ import Match from '../database/models/Match';
 import { Response } from 'superagent';
 import { IMatch, IMatchFromDB, IMatchInformations } from '../interfaces/IMatch';
 import {
+  editingMatchMock,
   invalidMatchesMock,
   matchesMock,
   newMatchMock,
@@ -131,7 +132,7 @@ describe('"/matches" route integration tests', () => {
   });
 });
 
-describe('"/matches/:id/finish" route integration tests', () => {
+describe('"/matches/:id/" route integration tests', () => {
   let chaiHttpResponse: Response;
 
   describe('PATCH', () => {
@@ -139,23 +140,52 @@ describe('"/matches/:id/finish" route integration tests', () => {
       (Match.update as sinon.SinonStub).restore();
     });
 
-    it('Finishs a match by his id', async () => {
-      sinon.stub(Match, 'update').resolves([1]);
+    describe('/matches/:id/', () => {
+      it('Edits a match successfully', async () => {
+        sinon.stub(Match, 'update').resolves([1]);
 
-      chaiHttpResponse = await chai.request(app).patch('/matches/1/finish');
+        chaiHttpResponse = await chai
+          .request(app)
+          .patch('/matches/1/')
+          .send(editingMatchMock);
 
-      expect(chaiHttpResponse.status).to.be.equal(StatusCodes.OK);
-      expect(chaiHttpResponse.body).to.deep.equal({ message: 'Finished' });
+        expect(chaiHttpResponse.status).to.be.equal(StatusCodes.OK);
+        expect(chaiHttpResponse.body).to.deep.equal({
+          message: 'Successfully updated!',
+        });
+      });
+
+      it('Fails if the update goes wrong', async () => {
+        sinon.stub(Match, 'update').resolves([-1]);
+
+        chaiHttpResponse = await chai.request(app).patch('/matches/1/');
+
+        expect(chaiHttpResponse.status).to.be.equal(StatusCodes.NOT_FOUND);
+        expect(chaiHttpResponse.body).to.deep.equal({
+          message: 'Update unsuccessful',
+        });
+      });
     });
 
-    it('Fails if the update goes wrong', async () => {
-      sinon.stub(Match, 'update').resolves([-1]);
+    describe('/matches/:id/finish', () => {
+      it('Finishs a match by his id', async () => {
+        sinon.stub(Match, 'update').resolves([1]);
 
-      chaiHttpResponse = await chai.request(app).patch('/matches/1/finish');
+        chaiHttpResponse = await chai.request(app).patch('/matches/1/finish');
 
-      expect(chaiHttpResponse.status).to.be.equal(StatusCodes.NOT_FOUND);
-      expect(chaiHttpResponse.body).to.deep.equal({
-        message: 'Update unsuccessful',
+        expect(chaiHttpResponse.status).to.be.equal(StatusCodes.OK);
+        expect(chaiHttpResponse.body).to.deep.equal({ message: 'Finished' });
+      });
+
+      it('Fails if the update goes wrong', async () => {
+        sinon.stub(Match, 'update').resolves([-1]);
+
+        chaiHttpResponse = await chai.request(app).patch('/matches/1/finish');
+
+        expect(chaiHttpResponse.status).to.be.equal(StatusCodes.NOT_FOUND);
+        expect(chaiHttpResponse.body).to.deep.equal({
+          message: 'Update unsuccessful',
+        });
       });
     });
   });

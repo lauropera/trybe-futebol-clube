@@ -50,7 +50,7 @@ export const invalidMatchesMock: INewMatch[] = [
     awayTeam: 8,
     homeTeamGoals: 2,
     awayTeamGoals: 2,
-  }
+  },
 ];
 
 export const newMatchResponseMock: IMatch = {
@@ -60,4 +60,9 @@ export const newMatchResponseMock: IMatch = {
   homeTeamGoals: 2,
   awayTeamGoals: 2,
   inProgress: true,
+};
+
+export const editingMatchMock = {
+  homeTeamGoals: 7,
+  awayTeamGoals: 1,
 };
