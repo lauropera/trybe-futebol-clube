@@ -4,16 +4,23 @@ import User from '../database/models/User';
 import TokenUtils from '../utils/TokenUtils';
 import HttpException from '../utils/HttpException';
 import { IUserService } from '../interfaces/IUser';
+import { loginSchema } from './validations/schemas/schema';
 
 class UserService implements IUserService {
   private _repository = User;
 
   constructor(private _tokenUtils = new TokenUtils()) {}
 
-  async login(credentials: ILogin): Promise<string> {
-    if (!credentials.email || !credentials.password) {
-      throw new HttpException(400, 'All fields must be filled');
+  private static validateLoginSchema(credentials: ILogin): void {
+    const { error } = loginSchema.validate(credentials);
+    if (error) {
+      const statusCode = error.message.includes('email') ? 401 : 400;
+      throw new HttpException(statusCode, error.message);
     }
+  }
+
+  async login(credentials: ILogin): Promise<string> {
+    UserService.validateLoginSchema(credentials);
 
     const user = await this._repository.findOne({
       where: { email: credentials.email },
