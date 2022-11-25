@@ -23,14 +23,14 @@ export interface IMatchInformations extends IMatch {
 
 export interface IMatchFromDB extends IMatchInformations, Match {}
 
-export interface IMatchesController {
+export interface IMatchController {
   listAll(req: Request, res: Response): Promise<void>;
   create(req: Request, res: Response): Promise<void>;
   finish(req: Request, res: Response): Promise<void>;
   update(req: Request, res: Response): Promise<void>;
 }
 
-export interface IMatchesService {
+export interface IMatchService {
   getAll(): Promise<IMatchFromDB[]>;
   getByProgress(status: string): Promise<IMatchFromDB[]>;
   create(match: INewMatch): Promise<IMatch>;

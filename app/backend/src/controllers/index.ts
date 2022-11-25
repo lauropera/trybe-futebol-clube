@@ -1,5 +1,5 @@
 import UserController from './UserController';
-import TeamsController from './TeamsController';
-import MatchesController from './MatchesController';
+import TeamController from './TeamController';
+import MatchController from './MatchController';
 
-export { UserController, TeamsController, MatchesController };
+export { UserController, TeamController, MatchController };

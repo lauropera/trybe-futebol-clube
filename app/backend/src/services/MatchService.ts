@@ -1,7 +1,7 @@
 import HttpException from '../utils/HttpException';
 import {
   IMatch,
-  IMatchesService,
+  IMatchService,
   IMatchFromDB,
   IMatchUpdate,
   INewMatch,
@@ -15,7 +15,7 @@ const INCLUDE_OPTIONS = [
   { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
 ];
 
-class MatchesService implements IMatchesService {
+class MatchService implements IMatchService {
   private _repository = Match;
   private _teamRepository = Team;
 
@@ -56,7 +56,7 @@ class MatchesService implements IMatchesService {
   }
 
   async create(match: INewMatch): Promise<IMatch> {
-    MatchesService.validateMatchSchema(match);
+    MatchService.validateMatchSchema(match);
     await this.validateMatchTeams(match);
 
     const newMatch = await this._repository.create({
@@ -80,4 +80,4 @@ class MatchesService implements IMatchesService {
   }
 }
 
-export default MatchesService;
+export default MatchService;

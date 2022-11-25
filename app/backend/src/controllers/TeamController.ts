@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { TeamsService } from '../services';
-import { ITeamsController } from '../interfaces/ITeam';
+import { ITeamController } from '../interfaces/ITeam';
 
-class TeamsController implements ITeamsController {
+class TeamController implements ITeamController {
   private _service: TeamsService;
 
   constructor() {
@@ -25,4 +25,4 @@ class TeamsController implements ITeamsController {
   }
 }
 
-export default TeamsController;
+export default TeamController;

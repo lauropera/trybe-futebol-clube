@@ -5,12 +5,12 @@ export interface ITeam {
   teamName: string;
 }
 
-export interface ITeamsController {
+export interface ITeamController {
   listAllTeams(req: Request, res: Response): Promise<void>;
   listTeamById(req: Request, res: Response): Promise<void>;
 }
 
-export interface ITeamsService {
+export interface ITeamService {
   getAllTeams(): Promise<ITeam[]>;
   getTeamById(id: number): Promise<ITeam>;
 }

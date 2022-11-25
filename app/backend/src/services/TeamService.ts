@@ -1,8 +1,8 @@
-import { ITeam, ITeamsService } from '../interfaces/ITeam';
+import { ITeam, ITeamService } from '../interfaces/ITeam';
 import Team from '../database/models/Team';
 import HttpException from '../utils/HttpException';
 
-class TeamsService implements ITeamsService {
+class TeamService implements ITeamService {
   private _repository = Team;
 
   async getAllTeams(): Promise<ITeam[]> {
@@ -17,4 +17,4 @@ class TeamsService implements ITeamsService {
   }
 }
 
-export default TeamsService;
+export default TeamService;

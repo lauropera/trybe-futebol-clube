@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import MatchesService from '../services/MatchesService';
-import { IMatchesController } from '../interfaces/IMatch';
+import MatchesService from '../services/MatchService';
+import { IMatchController } from '../interfaces/IMatch';
 
-class MatchesController implements IMatchesController {
+class MatchController implements IMatchController {
   private _service: MatchesService;
 
   constructor() {
@@ -41,4 +41,4 @@ class MatchesController implements IMatchesController {
   }
 }
 
-export default MatchesController;
+export default MatchController;
