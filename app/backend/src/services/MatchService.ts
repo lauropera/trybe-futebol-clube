@@ -1,6 +1,9 @@
 import HttpException from '../utils/HttpException';
-import { IMatch, IMatchScore, INewMatch } from '../interfaces/IMatch';
-import Match from '../database/models/Match';
+import Match, {
+  IMatch,
+  IMatchUpdate,
+  IMatchCreationAttrs,
+} from '../database/models/Match';
 import Team from '../database/models/Team';
 import { matchSchema } from './validations/schemas/schema';
 
@@ -10,11 +13,11 @@ const INCLUDE_OPTIONS = [
 ];
 
 class MatchService {
-  private _repository = Match;
-  private _teamRepository = Team;
+  private _model = Match;
+  private _teamModel = Team;
 
   async getAll(): Promise<IMatch[]> {
-    const matches = await this._repository.findAll({
+    const matches = await this._model.findAll({
       include: INCLUDE_OPTIONS,
     });
     return matches;
@@ -22,19 +25,22 @@ class MatchService {
 
   async getByProgress(status: string): Promise<IMatch[]> {
     const inProgress = status === 'true';
-    const matches = await this._repository.findAll({
+    const matches = await this._model.findAll({
       include: INCLUDE_OPTIONS,
       where: { inProgress },
     });
     return matches;
   }
 
-  private static validateMatchSchema(match: INewMatch): void {
+  private static validateMatchSchema(match: IMatchCreationAttrs): void {
     const { error } = matchSchema.validate(match);
     if (error) throw new HttpException(400, 'All fields must be filled');
   }
 
-  private async validateMatchTeams({ homeTeam, awayTeam }: INewMatch) {
+  private async validateMatchTeams({
+    homeTeam,
+    awayTeam,
+  }: IMatchCreationAttrs) {
     if (homeTeam === awayTeam) {
       throw new HttpException(
         422,
@@ -42,18 +48,18 @@ class MatchService {
       );
     }
 
-    const validHomeTeam = await this._teamRepository.findByPk(homeTeam);
-    const validAwayTeam = await this._teamRepository.findByPk(awayTeam);
+    const validHomeTeam = await this._teamModel.findByPk(homeTeam);
+    const validAwayTeam = await this._teamModel.findByPk(awayTeam);
     if (!validHomeTeam || !validAwayTeam) {
       throw new HttpException(404, 'There is no team with such id!');
     }
   }
 
-  async create(match: INewMatch): Promise<IMatch> {
+  async create(match: IMatchCreationAttrs): Promise<IMatch> {
     MatchService.validateMatchSchema(match);
     await this.validateMatchTeams(match);
 
-    const newMatch = await this._repository.create({
+    const newMatch = await this._model.create({
       ...match,
       inProgress: true,
     });
@@ -61,15 +67,15 @@ class MatchService {
   }
 
   async finish(id: number): Promise<void> {
-    const [result] = await this._repository.update(
+    const [result] = await this._model.update(
       { inProgress: false },
       { where: { id } },
     );
     if (result !== 1) throw new HttpException(404, 'Update unsuccessful');
   }
 
-  async update(values: IMatchScore, id: number): Promise<void> {
-    const [result] = await this._repository.update(values, { where: { id } });
+  async update(values: IMatchUpdate, id: number): Promise<void> {
+    const [result] = await this._model.update(values, { where: { id } });
     if (result !== 1) throw new HttpException(404, 'Update unsuccessful');
   }
 }

@@ -6,7 +6,7 @@ import HttpException from '../utils/HttpException';
 import { loginSchema } from './validations/schemas/schema';
 
 class UserService {
-  private _repository = User;
+  private _model = User;
 
   constructor(private _tokenUtils = new TokenUtils()) {}
 
@@ -21,7 +21,7 @@ class UserService {
   async login(credentials: ILogin): Promise<string> {
     UserService.validateLoginSchema(credentials);
 
-    const user = await this._repository.findOne({
+    const user = await this._model.findOne({
       where: { email: credentials.email },
     });
 
@@ -29,12 +29,12 @@ class UserService {
       throw new HttpException(401, 'Incorrect email or password');
     }
 
-    const token = await this._tokenUtils.generate(user.id);
+    const token = await this._tokenUtils.generate(user);
     return token;
   }
 
   async getRole(id: number): Promise<string> {
-    const user = await this._repository.findOne({ where: { id } });
+    const user = await this._model.findOne({ where: { id } });
     if (!user) throw new HttpException(404, 'User not found');
     return user.role;
   }

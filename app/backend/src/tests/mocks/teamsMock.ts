@@ -1,4 +1,4 @@
-import ITeam from '../../interfaces/ITeam';
+import { ITeam } from '../../database/models/Team';
 
 export const teamsMock: ITeam[] = [
   {

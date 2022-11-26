@@ -1,11 +1,11 @@
 import {
   IMatch,
-  INewMatch,
-  IMatchInformations,
-  IMatchScore,
-} from '../../interfaces/IMatch';
+  IMatchCreationAttrs,
+  IMatchReturned,
+  IMatchUpdate,
+} from '../../database/models/Match';
 
-export const matchesMock: IMatchInformations[] = [
+export const matchesMock: IMatchReturned[] = [
   {
     id: 1,
     homeTeam: 16,
@@ -36,14 +36,14 @@ export const matchesMock: IMatchInformations[] = [
   },
 ];
 
-export const newMatchMock: INewMatch = {
+export const newMatchMock: IMatchCreationAttrs = {
   homeTeam: 16,
   awayTeam: 8,
   homeTeamGoals: 2,
   awayTeamGoals: 2,
 };
 
-export const invalidMatchesMock: INewMatch[] = [
+export const invalidMatchesMock: IMatchCreationAttrs[] = [
   {
     homeTeam: 16,
     awayTeam: 16,
@@ -58,7 +58,7 @@ export const invalidMatchesMock: INewMatch[] = [
   },
 ];
 
-export const missingFieldsMock: Omit<INewMatch, 'homeTeam'> = {
+export const missingFieldsMock: Omit<IMatchCreationAttrs, 'homeTeam'> = {
   awayTeam: 8,
   homeTeamGoals: 2,
   awayTeamGoals: 2,
@@ -73,7 +73,7 @@ export const newMatchResponseMock: IMatch = {
   inProgress: true,
 };
 
-export const updateMatchMock: IMatchScore = {
+export const updateMatchMock: IMatchUpdate = {
   homeTeamGoals: 7,
   awayTeamGoals: 1,
 };

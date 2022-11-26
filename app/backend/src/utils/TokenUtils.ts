@@ -1,13 +1,14 @@
 import { NextFunction } from 'express';
 import * as jsonwebtokens from 'jsonwebtoken';
+import { IUser } from '../database/models/User';
 
 const SECRET = process.env.SECRET || 'jwt_secret';
 
 class TokenUtils {
   constructor(private jwt = jsonwebtokens) {}
 
-  public generate(id: number): string {
-    return this.jwt.sign({ id }, SECRET, {
+  public generate({ id, email }: IUser): string {
+    return this.jwt.sign({ data: { id, email } }, SECRET, {
       algorithm: 'HS256',
       expiresIn: '1d',
     });

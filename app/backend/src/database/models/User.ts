@@ -1,7 +1,19 @@
 import { Model, INTEGER, STRING } from 'sequelize';
 import db from '.';
 
-class User extends Model {
+interface IUser {
+  id: number;
+  username: string;
+  role: string;
+  email: string;
+  password: string;
+}
+
+type IUserCreationAttrs = Omit<IUser, 'id'>;
+
+type IUserReturned = Omit<IUser, 'password'>;
+
+class User extends Model<IUser, IUserCreationAttrs> {
   declare id: number;
   declare username: string;
   declare role: string;
@@ -31,3 +43,4 @@ User.init(
 );
 
 export default User;
+export { IUser, IUserCreationAttrs, IUserReturned };
