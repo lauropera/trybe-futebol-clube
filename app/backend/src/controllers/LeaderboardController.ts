@@ -10,6 +10,7 @@ class LeaderboardController {
 
     this.listHomeTeams = this.listHomeTeams.bind(this);
     this.listAwayTeams = this.listAwayTeams.bind(this);
+    this.getFullLeaderboard = this.getFullLeaderboard.bind(this);
   }
 
   async listHomeTeams(_req: Request, res: Response): Promise<void> {
@@ -19,6 +20,11 @@ class LeaderboardController {
 
   async listAwayTeams(_req: Request, res: Response): Promise<void> {
     const teams = await this._service.getAwayTeamsLeaderboard();
+    res.status(StatusCodes.OK).json(teams);
+  }
+
+  async getFullLeaderboard(_req: Request, res: Response): Promise<void> {
+    const teams = await this._service.getLeaderboard();
     res.status(StatusCodes.OK).json(teams);
   }
 }

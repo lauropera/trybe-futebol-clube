@@ -144,12 +144,45 @@ class LeaderboardService {
   }
 
   async getAwayTeamsLeaderboard(): Promise<ILeaderboard[]> {
-    const homeMatches = (await this.getMatchesData(
+    const awayMatches = (await this.getMatchesData(
       'awayTeam',
     )) as IAwayTeamMatches[];
 
-    const leaderboard = homeMatches.map(({ name, awayTeamMatches }) =>
+    const leaderboard = awayMatches.map(({ name, awayTeamMatches }) =>
       LeaderboardService.setLeaderboard('awayTeam', name, awayTeamMatches));
+
+    return LeaderboardService.sortLeaderboard(leaderboard);
+  }
+
+  private static setFullLeaderboard(teamData: ILeaderboard[]) {
+    const totalPoints = teamData[0].totalPoints + teamData[1].totalPoints;
+    const totalGames = teamData[0].totalGames + teamData[1].totalGames;
+    return {
+      name: teamData[0].name,
+      totalPoints,
+      totalGames,
+      totalVictories: teamData[0].totalVictories + teamData[1].totalVictories,
+      totalDraws: teamData[0].totalDraws + teamData[1].totalDraws,
+      totalLosses: teamData[0].totalLosses + teamData[1].totalLosses,
+      goalsFavor: teamData[0].goalsFavor + teamData[1].goalsFavor,
+      goalsOwn: teamData[0].goalsOwn + teamData[1].goalsOwn,
+      goalsBalance: teamData[0].goalsBalance + teamData[1].goalsBalance,
+      efficiency: ((totalPoints / (totalGames * 3)) * 100).toFixed(2),
+    };
+  }
+
+  async getLeaderboard(): Promise<ILeaderboard[]> {
+    const homeTeamsLeaderboard = await this.getHomeTeamsLeaderboard();
+    const awayTeamsLeaderboard = await this.getAwayTeamsLeaderboard();
+    const fullLeaderboard = homeTeamsLeaderboard.concat(awayTeamsLeaderboard);
+    const leaderboard = [] as ILeaderboard[];
+
+    homeTeamsLeaderboard.forEach((team) => {
+      const teamData = fullLeaderboard.filter(
+        ({ name }) => team.name === name,
+      );
+      leaderboard.push(LeaderboardService.setFullLeaderboard(teamData));
+    });
 
     return LeaderboardService.sortLeaderboard(leaderboard);
   }
