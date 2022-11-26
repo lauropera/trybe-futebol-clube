@@ -1,13 +1,12 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { TeamsService } from '../services';
-import { ITeamController } from '../interfaces/ITeam';
+import { TeamService } from '../services';
 
-class TeamController implements ITeamController {
-  private _service: TeamsService;
+class TeamController {
+  private _service: TeamService;
 
   constructor() {
-    this._service = new TeamsService();
+    this._service = new TeamService();
 
     this.listAllTeams = this.listAllTeams.bind(this);
     this.listTeamById = this.listTeamById.bind(this);

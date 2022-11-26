@@ -1,6 +1,7 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
 import * as jsonwebtoken from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import * as bcryptjs from 'bcryptjs';
 import { Response } from 'superagent';
 // @ts-ignore
@@ -8,6 +9,7 @@ import chaiHttp = require('chai-http');
 import App from '../app';
 import User from '../database/models/User';
 import { invalidLogins, loginMock, userMock } from './mocks/userMock';
+import { StatusCodes } from 'http-status-codes';
 
 chai.use(chaiHttp);
 
@@ -26,7 +28,7 @@ describe('"/login" route integration tests', () => {
     describe('With sucess', () => {
       it('Login successfully', async () => {
         sinon.stub(User, 'findOne').resolves(userMock as User);
-        sinon.stub(jsonwebtoken, 'sign').resolves('token');
+        sinon.stub(jsonwebtoken, 'sign').resolves('generatedToken');
         sinon.stub(bcryptjs, 'compare').resolves(true);
 
         chaiHttpResponse = await chai
@@ -34,12 +36,16 @@ describe('"/login" route integration tests', () => {
           .post('/login')
           .send(loginMock);
 
-        expect(chaiHttpResponse.status).to.be.equal(200);
+        expect(chaiHttpResponse.status).to.be.equal(StatusCodes.OK);
+        expect(chaiHttpResponse.body).to.deep.equal({
+          token: 'generatedToken',
+        });
+
         (jsonwebtoken.sign as sinon.SinonStub).restore();
       });
     });
 
-    describe('It fails', () => {
+    describe('With failure', () => {
       beforeEach(async () => {
         sinon.stub(User, 'findOne').resolves(undefined);
         sinon.stub(bcryptjs, 'compare').resolves(false);
@@ -100,18 +106,22 @@ describe('"/login/validate" route integration tests', () => {
   let chaiHttpResponse: Response;
 
   describe('GET', () => {
+    beforeEach(() => {
+      sinon.stub(jsonwebtoken, 'verify').resolves({ id: 1 });
+    });
+
     afterEach(() => {
       (User.findOne as sinon.SinonStub).restore();
+      (jwt.verify as sinon.SinonStub).restore();
     });
 
     it('Returns the logged user role', async () => {
-      sinon.stub(jsonwebtoken, 'verify').resolves({ id: 1 });
       sinon.stub(User, 'findOne').resolves(userMock as User);
 
       chaiHttpResponse = await chai
         .request(app)
         .get('/login/validate')
-        .auth('token', { type: 'bearer' });
+        .set('Authorization', 'something');
 
       expect(chaiHttpResponse.status).to.be.equal(200);
       expect(chaiHttpResponse.body).to.deep.equal({ role: userMock.role });
@@ -123,7 +133,7 @@ describe('"/login/validate" route integration tests', () => {
       chaiHttpResponse = await chai
         .request(app)
         .get('/login/validate')
-        .auth('token', { type: 'bearer' });
+        .set('Authorization', 'something');
 
       expect(chaiHttpResponse.status).to.be.equal(404);
       expect(chaiHttpResponse.body).to.deep.equal({

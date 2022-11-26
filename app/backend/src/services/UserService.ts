@@ -3,10 +3,9 @@ import ILogin from '../interfaces/ILogin';
 import User from '../database/models/User';
 import TokenUtils from '../utils/TokenUtils';
 import HttpException from '../utils/HttpException';
-import { IUserService } from '../interfaces/IUser';
 import { loginSchema } from './validations/schemas/schema';
 
-class UserService implements IUserService {
+class UserService {
   private _repository = User;
 
   constructor(private _tokenUtils = new TokenUtils()) {}

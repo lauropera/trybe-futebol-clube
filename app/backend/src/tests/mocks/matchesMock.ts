@@ -2,7 +2,7 @@ import {
   IMatch,
   INewMatch,
   IMatchInformations,
-  IMatchUpdate,
+  IMatchScore,
 } from '../../interfaces/IMatch';
 
 export const matchesMock: IMatchInformations[] = [
@@ -73,7 +73,7 @@ export const newMatchResponseMock: IMatch = {
   inProgress: true,
 };
 
-export const updateMatchMock: IMatchUpdate = {
+export const updateMatchMock: IMatchScore = {
   homeTeamGoals: 7,
   awayTeamGoals: 1,
 };

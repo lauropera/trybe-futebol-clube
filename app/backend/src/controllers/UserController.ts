@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { IUserController } from '../interfaces/IUser';
 import { UserService } from '../services';
 
-class UserController implements IUserController {
+class UserController {
   private _service: UserService;
 
   constructor() {

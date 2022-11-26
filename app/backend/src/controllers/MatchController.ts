@@ -1,13 +1,12 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import MatchesService from '../services/MatchService';
-import { IMatchController } from '../interfaces/IMatch';
+import MatchService from '../services/MatchService';
 
-class MatchController implements IMatchController {
-  private _service: MatchesService;
+class MatchController {
+  private _service: MatchService;
 
   constructor() {
-    this._service = new MatchesService();
+    this._service = new MatchService();
 
     this.listAll = this.listAll.bind(this);
     this.create = this.create.bind(this);

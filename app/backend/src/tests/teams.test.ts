@@ -8,6 +8,7 @@ import Team from '../database/models/Team';
 
 import { Response } from 'superagent';
 import { teamsMock } from './mocks/teamsMock';
+import { StatusCodes } from 'http-status-codes';
 
 chai.use(chaiHttp);
 
@@ -23,7 +24,7 @@ describe('"/teams" route integration tests', () => {
       sinon.stub(Team, 'findAll').resolves(teamsMock as Team[]);
       chaiHttpResponse = await chai.request(app).get('/teams');
 
-      expect(chaiHttpResponse.status).to.be.equal(200);
+      expect(chaiHttpResponse.status).to.be.equal(StatusCodes.OK);
       expect(chaiHttpResponse.body).to.deep.equal(teamsMock);
     });
   });
@@ -42,7 +43,7 @@ describe('"/teams/:id" route integration tests', () => {
 
       chaiHttpResponse = await chai.request(app).get('/teams/1');
 
-      expect(chaiHttpResponse.status).to.be.equal(200);
+      expect(chaiHttpResponse.status).to.be.equal(StatusCodes.OK);
       expect(chaiHttpResponse.body).to.deep.equal(teamsMock[0]);
     });
 
@@ -51,7 +52,7 @@ describe('"/teams/:id" route integration tests', () => {
 
       chaiHttpResponse = await chai.request(app).get('/teams/1');
 
-      expect(chaiHttpResponse.status).to.be.equal(404);
+      expect(chaiHttpResponse.status).to.be.equal(StatusCodes.NOT_FOUND);
       expect(chaiHttpResponse.body).to.deep.equal({
         message: 'There is no team with such id!',
       });

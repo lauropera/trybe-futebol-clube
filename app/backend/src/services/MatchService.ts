@@ -1,37 +1,31 @@
 import HttpException from '../utils/HttpException';
-import {
-  IMatch,
-  IMatchService,
-  IMatchFromDB,
-  IMatchUpdate,
-  INewMatch,
-} from '../interfaces/IMatch';
+import { IMatch, IMatchScore, INewMatch } from '../interfaces/IMatch';
 import Match from '../database/models/Match';
 import Team from '../database/models/Team';
 import { matchSchema } from './validations/schemas/schema';
 
 const INCLUDE_OPTIONS = [
-  { model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
-  { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
+  { model: Team, as: 'teamHome', attributes: ['teamName'] },
+  { model: Team, as: 'teamAway', attributes: ['teamName'] },
 ];
 
-class MatchService implements IMatchService {
+class MatchService {
   private _repository = Match;
   private _teamRepository = Team;
 
-  async getAll(): Promise<IMatchFromDB[]> {
-    const matches = (await this._repository.findAll({
+  async getAll(): Promise<IMatch[]> {
+    const matches = await this._repository.findAll({
       include: INCLUDE_OPTIONS,
-    })) as IMatchFromDB[];
+    });
     return matches;
   }
 
-  async getByProgress(status: string): Promise<IMatchFromDB[]> {
+  async getByProgress(status: string): Promise<IMatch[]> {
     const inProgress = status === 'true';
-    const matches = (await this._repository.findAll({
+    const matches = await this._repository.findAll({
       include: INCLUDE_OPTIONS,
       where: { inProgress },
-    })) as IMatchFromDB[];
+    });
     return matches;
   }
 
@@ -74,7 +68,7 @@ class MatchService implements IMatchService {
     if (result !== 1) throw new HttpException(404, 'Update unsuccessful');
   }
 
-  async update(values: IMatchUpdate, id: number): Promise<void> {
+  async update(values: IMatchScore, id: number): Promise<void> {
     const [result] = await this._repository.update(values, { where: { id } });
     if (result !== 1) throw new HttpException(404, 'Update unsuccessful');
   }

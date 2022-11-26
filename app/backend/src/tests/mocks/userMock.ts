@@ -1,5 +1,5 @@
 import ILogin from '../../interfaces/ILogin';
-import { IUser } from '../../interfaces/IUser';
+import IUser from '../../interfaces/IUser';
 
 export const userMock: IUser = {
   id: 1,
