@@ -5,7 +5,7 @@ import Match, {
   IMatchCreationAttrs,
 } from '../database/models/Match';
 import Team from '../database/models/Team';
-import { matchSchema } from './validations/schemas/schema';
+import { matchSchema } from './utils/validations/schemas/schema';
 
 const INCLUDE_OPTIONS = [
   { model: Team, as: 'teamHome', attributes: ['teamName'] },

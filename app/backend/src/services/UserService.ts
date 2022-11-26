@@ -1,14 +1,13 @@
 import { compare } from 'bcryptjs';
 import ILogin from '../interfaces/ILogin';
 import User from '../database/models/User';
-import TokenUtils from '../utils/TokenUtils';
+import Token from './utils/TokenUtils';
 import HttpException from '../utils/HttpException';
-import { loginSchema } from './validations/schemas/schema';
+import { loginSchema } from './utils/validations/schemas/schema';
 
 class UserService {
   private _model = User;
-
-  constructor(private _tokenUtils = new TokenUtils()) {}
+  private _tokenUtils = Token;
 
   private static validateLoginSchema(credentials: ILogin): void {
     const { error } = loginSchema.validate(credentials);

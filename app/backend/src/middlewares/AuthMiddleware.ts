@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import TokenUtils from '../utils/TokenUtils';
+import Token from '../services/utils/TokenUtils';
 
 async function authMiddleware(
   req: Request,
@@ -7,8 +7,7 @@ async function authMiddleware(
   next: NextFunction,
 ): Promise<void> {
   const token: string = req.headers.authorization || '';
-  const tokenUtils = new TokenUtils();
-  res.locals.userIddentifier = await tokenUtils.authenticate(token, next);
+  res.locals.userIddentifier = await Token.authenticate(token, next);
   next();
 }
 

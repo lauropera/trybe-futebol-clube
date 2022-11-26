@@ -18,7 +18,7 @@ class UserController {
   }
 
   async getRole(_req: Request, res: Response): Promise<void> {
-    const { id } = res.locals.userIddentifier;
+    const { data: { id } } = res.locals.userIddentifier;
     const role = await this._service.getRole(id);
     res.status(StatusCodes.OK).json({ role });
   }
