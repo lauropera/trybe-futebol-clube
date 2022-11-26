@@ -1,9 +1,8 @@
-export interface ILeaderboard extends matchScores {
+import ITeamGoals from './ITeamGoals';
+
+export interface ILeaderboard extends matchScores, ITeamGoals {
   name: string;
   totalGames: number;
-  goalsFavor: number;
-  goalsOwn: number;
-  goalsBalance: number;
   efficiency: string;
 }
 

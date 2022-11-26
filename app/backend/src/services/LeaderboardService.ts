@@ -1,5 +1,6 @@
 import Team from '../database/models/Team';
 import Match from '../database/models/Match';
+import ITeamGoals from '../interfaces/ITeamGoals';
 import {
   ILeaderboard,
   matchGoals,
@@ -100,17 +101,33 @@ class LeaderboardService {
     );
   }
 
-  private static setLeaderboard(name: string, matches: teamGoals) {
+  private static gameGoals(team: string, goals: matchGoals): ITeamGoals {
+    const goalsFavor = LeaderboardService.isHomeTeam(team)
+      ? goals.homeGoals
+      : goals.awayGoals;
+
+    const goalsOwn = LeaderboardService.isHomeTeam(team)
+      ? goals.awayGoals
+      : goals.homeGoals;
+
+    const goalsBalance = goalsFavor - goalsOwn;
+
+    return { goalsFavor, goalsOwn, goalsBalance };
+  }
+
+  private static setLeaderboard(
+    team: string,
+    name: string,
+    matches: teamGoals,
+  ) {
     const goals = LeaderboardService.sumGoals(matches);
-    const points = LeaderboardService.gamePoints('homeTeam', matches);
+    const points = LeaderboardService.gamePoints(team, matches);
     const totalGames = matches.length;
     return {
       name,
       totalGames,
       ...points,
-      goalsFavor: goals.homeGoals,
-      goalsOwn: goals.awayGoals,
-      goalsBalance: goals.homeGoals - goals.awayGoals,
+      ...LeaderboardService.gameGoals(team, goals),
       efficiency: ((points.totalPoints / (totalGames * 3)) * 100).toFixed(2),
     };
   }
@@ -121,7 +138,18 @@ class LeaderboardService {
     )) as IHomeTeamMatches[];
 
     const leaderboard = homeMatches.map(({ name, homeTeamMatches }) =>
-      LeaderboardService.setLeaderboard(name, homeTeamMatches));
+      LeaderboardService.setLeaderboard('homeTeam', name, homeTeamMatches));
+
+    return LeaderboardService.sortLeaderboard(leaderboard);
+  }
+
+  async getAwayTeamsLeaderboard(): Promise<ILeaderboard[]> {
+    const homeMatches = (await this.getMatchesData(
+      'awayTeam',
+    )) as IAwayTeamMatches[];
+
+    const leaderboard = homeMatches.map(({ name, awayTeamMatches }) =>
+      LeaderboardService.setLeaderboard('awayTeam', name, awayTeamMatches));
 
     return LeaderboardService.sortLeaderboard(leaderboard);
   }
