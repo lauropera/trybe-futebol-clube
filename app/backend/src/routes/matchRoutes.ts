@@ -1,9 +1,7 @@
 import 'express-async-errors';
 import { Router } from 'express';
-import { MatchController } from '../controllers';
+import { matchController } from './controllerInstances';
 import authMiddleware from '../middlewares/AuthMiddleware';
-
-const matchController = new MatchController();
 
 const router = Router();
 

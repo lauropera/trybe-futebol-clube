@@ -1,10 +1,8 @@
 import 'express-async-errors';
 import { Router } from 'express';
-import { TeamController } from '../controllers';
+import { teamController } from './controllerInstances';
 
 const router = Router();
-
-const teamController = new TeamController();
 
 router.get('/', teamController.listAllTeams);
 router.get('/:id', teamController.listTeamById);
