@@ -1,16 +1,14 @@
-export type teamGoals = [
-  {
-    homeTeamGoals: number;
-    awayTeamGoals: number;
-  },
-];
+export interface ITeamGoals {
+  homeTeamGoals: number;
+  awayTeamGoals: number;
+}
 
 export interface IHomeTeamMatches {
   name: string;
-  homeTeamMatches: teamGoals;
+  homeTeamMatches: ITeamGoals[];
 }
 
 export interface IAwayTeamMatches {
   name: string;
-  awayTeamMatches: teamGoals;
+  awayTeamMatches: ITeamGoals[];
 }

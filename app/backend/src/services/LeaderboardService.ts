@@ -1,6 +1,6 @@
 import Team from '../database/models/Team';
 import Match from '../database/models/Match';
-import ITeamGoals from '../interfaces/ITeamGoals';
+import IGoals from '../interfaces/IGoals';
 import {
   ILeaderboard,
   matchGoals,
@@ -9,7 +9,7 @@ import {
 import {
   IHomeTeamMatches,
   IAwayTeamMatches,
-  teamGoals,
+  ITeamGoals,
 } from '../interfaces/ITeamMatches';
 
 class LeaderboardService {
@@ -37,12 +37,11 @@ class LeaderboardService {
       ],
       attributes: [['team_name', 'name']],
     });
-
     const matches = dbMatches.map((match) => match.get({ plain: true }));
     return matches;
   }
 
-  private static sumGoals(teamMatches: teamGoals): matchGoals {
+  private static sumGoals(teamMatches: ITeamGoals[]): matchGoals {
     const homeGoals = teamMatches.reduce(
       (acc, curr) => acc + curr.homeTeamGoals,
       0,
@@ -54,21 +53,21 @@ class LeaderboardService {
     return { homeGoals, awayGoals };
   }
 
-  private static homeTeamPoints(matches: teamGoals): number {
+  private static homeTeamPoints(matches: ITeamGoals[]): number {
     return matches.reduce(
       (acc, curr) => (curr.homeTeamGoals > curr.awayTeamGoals ? acc + 1 : acc),
       0,
     );
   }
 
-  private static awayTeamPoints(matches: teamGoals): number {
+  private static awayTeamPoints(matches: ITeamGoals[]): number {
     return matches.reduce(
       (acc, curr) => (curr.awayTeamGoals > curr.homeTeamGoals ? acc + 1 : acc),
       0,
     );
   }
 
-  private static drawPoints(matches: teamGoals): number {
+  private static drawPoints(matches: ITeamGoals[]): number {
     return matches.reduce(
       (acc, curr) =>
         (curr.awayTeamGoals === curr.homeTeamGoals ? acc + 1 : acc),
@@ -76,7 +75,7 @@ class LeaderboardService {
     );
   }
 
-  private static gamePoints(team: string, matches: teamGoals): matchScores {
+  private static gamePoints(team: string, matches: ITeamGoals[]): matchScores {
     const totalVictories = LeaderboardService.isHomeTeam(team)
       ? LeaderboardService.homeTeamPoints(matches)
       : LeaderboardService.awayTeamPoints(matches);
@@ -101,7 +100,7 @@ class LeaderboardService {
     );
   }
 
-  private static gameGoals(team: string, goals: matchGoals): ITeamGoals {
+  private static gameGoals(team: string, goals: matchGoals): IGoals {
     const goalsFavor = LeaderboardService.isHomeTeam(team)
       ? goals.homeGoals
       : goals.awayGoals;
@@ -118,7 +117,7 @@ class LeaderboardService {
   private static setLeaderboard(
     team: string,
     name: string,
-    matches: teamGoals,
+    matches: ITeamGoals[],
   ) {
     const goals = LeaderboardService.sumGoals(matches);
     const points = LeaderboardService.gamePoints(team, matches);
@@ -178,9 +177,7 @@ class LeaderboardService {
     const leaderboard = [] as ILeaderboard[];
 
     homeTeamsLeaderboard.forEach((team) => {
-      const teamData = fullLeaderboard.filter(
-        ({ name }) => team.name === name,
-      );
+      const teamData = fullLeaderboard.filter(({ name }) => team.name === name);
       leaderboard.push(LeaderboardService.setFullLeaderboard(teamData));
     });
 

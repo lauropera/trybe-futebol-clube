@@ -1,4 +1,4 @@
-export default interface ITeamGoals {
+export default interface IGoals {
   goalsFavor: number;
   goalsOwn: number;
   goalsBalance: number;

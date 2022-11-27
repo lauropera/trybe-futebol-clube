@@ -1,5 +1,13 @@
 import ILogin from '../../interfaces/ILogin';
 import { IUser } from '../../database/models/User';
+import ITokenPayload from '../../interfaces/ITokenPayload';
+
+export const dataToken: ITokenPayload = {
+  data: {
+    id: 1,
+    email: 'arezu@pokemail.com',
+  },
+};
 
 export const userMock: IUser = {
   id: 1,

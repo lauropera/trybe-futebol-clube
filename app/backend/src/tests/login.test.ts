@@ -8,7 +8,12 @@ import { Response } from 'superagent';
 import chaiHttp = require('chai-http');
 import App from '../app';
 import User from '../database/models/User';
-import { invalidLogins, loginMock, userMock } from './mocks/userMock';
+import {
+  dataToken,
+  invalidLogins,
+  loginMock,
+  userMock,
+} from './mocks/userMock';
 import { StatusCodes } from 'http-status-codes';
 
 chai.use(chaiHttp);
@@ -107,7 +112,7 @@ describe('"/login/validate" route integration tests', () => {
 
   describe('GET', () => {
     beforeEach(() => {
-      sinon.stub(jsonwebtoken, 'verify').resolves({ id: 1 });
+      sinon.stub(jsonwebtoken, 'verify').resolves(dataToken);
     });
 
     afterEach(() => {
@@ -124,6 +129,8 @@ describe('"/login/validate" route integration tests', () => {
         .set('Authorization', 'something');
 
       expect(chaiHttpResponse.status).to.be.equal(200);
+      console.log(chaiHttpResponse.body);
+
       expect(chaiHttpResponse.body).to.deep.equal({ role: userMock.role });
     });
 
