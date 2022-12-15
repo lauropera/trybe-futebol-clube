@@ -71,6 +71,10 @@ Essa aplicação tem como objetivo ser um site informativo sobre partidas e clas
 
 <br />
 
+Obs.: Os arquivos da pasta front-end foram disponibilizados pela [Trybe](https://www.betrybe.com/) para a realização deste projeto.
+
+<br />
+
 # 🚀 Instalação e execução
 
 <details>
